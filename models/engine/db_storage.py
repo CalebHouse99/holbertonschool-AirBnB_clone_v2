@@ -50,4 +50,8 @@ class DBStorage:
             return
 
     def reload(self):
-        """Reload it"""        
+        """Reload it"""
+
+    def close(self):
+        """close it"""
+        self.__session.remove()
