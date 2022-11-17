@@ -4,12 +4,14 @@ from sqlalchemy import MetaData
 from sqlalchemy.orm import Session
 import os
 
+
 class DBStorage:
     meta = MetaData()
-    
+
     """Database storage class"""
     __engine = None
     __session = None
+
     def __init__(self):
         """Instatntiates db storage"""
         from sqlalchemy import create_engine
@@ -19,8 +21,9 @@ class DBStorage:
         sql_usr = os.getenv('HBNB_MYSQL_USER')
         sql_host = os.getenv('HBNB_MYSQL_HOST')
         env = os.getenv('HBNB_ENV')
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'\
-            .format(sql_usr, sql_pwd, database_url), pool_pre_ping=True)
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'
+                                      .format(sql_usr, sql_pwd, database_url),
+                                      pool_pre_ping=True)
         if env == "test":
             for tbl in reversed(meta.sorted_tables):
                 engine.execute(tbl.delete())
@@ -30,11 +33,11 @@ class DBStorage:
         session = Session(self.__engine)
         some_dict = {}
         key = obj.__class__.__name__ + "." + obj.id
-        some_dict[key]=obj
+        some_dict[key] = obj
 
     def new(self, obj):
         """add obj to current db"""
-    
+
     def save(self):
         """commit all changes"""
 
@@ -54,4 +57,5 @@ class DBStorage:
 
     def close(self):
         """close it"""
-        self.__session.remove()
+        if self.__session:
+            self.__session.remove()
